@@ -36,6 +36,12 @@ const HomeScreen = () => {
         }
     }
 
+    const handleChangeCategory = (category) => {
+        setMeals([]);
+        getRecipes(category);
+        setActiveCategory(category);
+    }
+
     useEffect(() => {
         getCategories();
     }, [])
@@ -70,7 +76,7 @@ const HomeScreen = () => {
                 {/* categories */}
                 <View className='my-2'>
                     {
-                        categories.length > 0 && <Categories categories={categories} activeCategory={activeCategory} setActiveCategory={setActiveCategory} />
+                        categories.length > 0 && <Categories categories={categories} activeCategory={activeCategory} handleChangeCategory={handleChangeCategory} />
                     }
                 </View>
 
