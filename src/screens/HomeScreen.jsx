@@ -11,6 +11,7 @@ const HomeScreen = () => {
     const [activeCategory, setActiveCategory] = useState("Beef");
     const [categories, setCategories] = useState([]);
     const [meals, setMeals] = useState([]);
+    const [searchMeal, setSearchMeal] = useState('');
 
 
     const getCategories = async () => {
@@ -36,6 +37,17 @@ const HomeScreen = () => {
         }
     }
 
+    const getSearchedRecipes = async () => {
+        try {
+            const response = await axios.get(`https://www.themealdb.com/api/json/v1/1/search.php?s=${searchMeal}`)
+            if (response && response.data) {
+                setMeals(response.data?.meals)
+            }
+        } catch (error) {
+            console.log('Error occured :', error)
+        }
+    }
+
     const handleChangeCategory = (category) => {
         setMeals([]);
         getRecipes(category);
@@ -45,6 +57,10 @@ const HomeScreen = () => {
     useEffect(() => {
         getCategories();
     }, [])
+
+    useEffect(() => {
+        getSearchedRecipes();
+    }, [searchMeal])
 
     return (
         <View className='flex-1 bg-white'>
@@ -67,7 +83,7 @@ const HomeScreen = () => {
 
                 {/* searchbar */}
                 <View className='mx-4 flex-row items-center rounded-full bg-black/5 p-[6px]'>
-                    <TextInput placeholder='Search any recipe' placeholderTextColor={"gray"} style={{ fontSize: hp(1.7) }} className='flex-1 text-base pl-5 tracking-wider' />
+                    <TextInput placeholder='Search any recipe' placeholderTextColor={"gray"} style={{ fontSize: hp(1.7) }} className='flex-1 text-base pl-5 tracking-wider' value={searchMeal} onChangeText={(e) => setSearchMeal(e)} />
                     <View className='bg-white rounded-full p-3'>
                         <MagnifyingGlassIcon size={hp(2.5)} strokeWidth={3} color={'gray'} />
                     </View>
